@@ -3,6 +3,7 @@ package entities;
 import java.time.LocalDate;
 
 public class Student {
+	private String profile;
 	private String name;
 	private String email;
 	private int age;
@@ -45,5 +46,11 @@ public class Student {
 	}
 	public void setDob(LocalDate dob) {
 		this.dob = dob;
+	}
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 }

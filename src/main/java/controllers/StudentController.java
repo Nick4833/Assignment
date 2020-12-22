@@ -1,19 +1,23 @@
 package controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import entities.Student;
 
 @WebServlet(urlPatterns = {"/addstudent", "/students"})
+@MultipartConfig
 public class StudentController extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
@@ -40,7 +44,15 @@ public class StudentController extends HttpServlet{
 		String year = req.getParameter("year");
 		LocalDate dob = LocalDate.parse(req.getParameter("dob"));
 		
+		Part imgPart=req.getPart("profile");
+		
+		String imgFileName=imgPart.getSubmittedFileName();
+		String currentName=imgFileName.substring(0,imgFileName.lastIndexOf("."));
+		String newName=""+System.currentTimeMillis();
+		imgFileName=imgFileName.replace(currentName,newName);
+		
 		Student s = new Student();
+		s.setProfile(imgFileName);
 		s.setName(name);
 		s.setAge(age);
 		s.setEmail(email);
@@ -58,6 +70,13 @@ public class StudentController extends HttpServlet{
 		studentList.add(s);
 		
 		session.setAttribute("studentList", studentList);
+		
+		String rootPath=getServletContext().getRealPath("");
+		String dirPath=rootPath+File.separator+"imgUploads";
+		File rootDir=new File(dirPath);
+		if(!rootDir.exists())
+			rootDir.mkdirs();
+		imgPart.write(rootDir+File.separator+imgFileName);
 		
 		resp.sendRedirect("students.jsp");
 		

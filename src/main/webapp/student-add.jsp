@@ -13,8 +13,11 @@
 
 		<h2 class="mt-3">Add a Student</h2>
 		<c:url value="/addstudent" var="addS"></c:url>
-		<form action="${addS}" method="post" class="form m-5">
+		<form action="${addS}" method="post" class="form m-5" enctype="multipart/form-data">
 			<div class="form-group">
+				<label for="profile" class="form-label">Profile</label> <br />
+				<input type="file" name="profile" id="profile"/>
+				<br /><br />
 				<label for="name" class="form-label">Name</label> 
 				<input type="text" name="name" id="name" class="form-control" placeholder="Enter Student Name." required/>
 			</div>
